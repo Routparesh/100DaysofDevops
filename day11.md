@@ -1,24 +1,24 @@
 ## Day 11: Install and Configure Tomcat Server
 
 ```bash
-> sudo dnf install java-11-openjdk -y
+sudo dnf install java-11-openjdk -y
 
-> java -version
+java -version
 
-> sudo curl -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
+sudo curl -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
 
-> sudo tar -xvzf apache-tomcat-9.0.96.tar.gz
+sudo tar -xvzf apache-tomcat-9.0.96.tar.gz
 
-> sudo mv ~/apache-tomcat-9.0.96 /opt/tomcat
+sudo mv ~/apache-tomcat-9.0.96 /opt/tomcat
 
-> sudo chmod +x /opt/tomcat/bin/*.sh
+sudo chmod +x /opt/tomcat/bin/*.sh
 
-> sudo chown -R banner:banner /opt/tomcat
+sudo chown -R banner:banner /opt/tomcat
 
 ```
 
 ```bash
-> nano /opt/tomcat/conf/server.xml
+nano /opt/tomcat/conf/server.xml
 ```
 
 Change Tomcat Port to 6400
@@ -76,5 +76,5 @@ Transfer ROOT.war from Jump Host
 On the Jump Host:
 
 ```bash
-> scp /tmp/ROOT.war banner@stapp03:/opt/tomcat/webapps/
+scp /tmp/ROOT.war banner@stapp03:/opt/tomcat/webapps/
 ```
