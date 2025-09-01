@@ -1,0 +1,60 @@
+## Day 16: Install and Configure Nginx as an LBR
+
+Day by day traffic is increasing on one of the websites managed by the Nautilus production support team. Therefore, the team has observed a degradation in website performance. Following discussions about this issue, the team has decided to deploy this application on a high availability stack i.e on Nautilus infra in Stratos DC. They started the migration last month and it is almost done, as only the LBR server configuration is pending. Configure LBR server as per the information given below:
+
+a. Install nginx on LBR (load balancer) server.
+b. Configure load-balancing with the an http context making use of all App Servers. Ensure that you update only the main Nginx configuration file located at /etc/nginx/nginx.conf.
+c. Make sure you do not update the apache port that is already defined in the apache configuration on all app servers, also make sure apache service is up and running on all app servers.
+d. Once done, you can access the website using StaticApp button on the top bar.
+
+In app server
+
+```bash
+sudo systemctl status httpd     # CentOS/RHEL
+
+# Start if not running
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo cat /etc/httpd/conf/httpd.conf | grep -i "listen"
+```
+
+In LBR Server
+
+```bash
+sudo yum install nginx -y
+sudo systemctl enable nginx
+sudo systemctl start nginx
+sudo systemctl status nginx
+sudo dnf install nano -y
+sudo nano /etc/nginx/nginx.conf
+```
+
+Add upstream block for app servers (replace with app servers’ IPs and Apache ports):
+
+```bash
+http {
+upstream app_servers {
+server 10.0.0.101:80; # App server 1
+server 10.0.0.102:80; # App server 2
+server 10.0.0.103:80; # App server 3
+}
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://app_servers;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For
+            $proxy_add_x_forwarded_for;
+        }
+    }
+
+}
+```
+
+```bash
+sudo nginx -t
+sudo systemctl restart nginx
+```
