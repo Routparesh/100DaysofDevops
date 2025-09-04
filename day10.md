@@ -46,7 +46,9 @@ Step 3 — Create the news_backup.sh script
 
 ```bash
 nano /scripts/news_backup.sh
+```
 
+```bash
 #!/bin/bash
 
 # Variables
